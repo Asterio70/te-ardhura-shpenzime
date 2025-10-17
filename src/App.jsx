@@ -1,3 +1,4 @@
+import { app } from "./firebase";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import {
