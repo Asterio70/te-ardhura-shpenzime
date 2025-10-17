@@ -1,3 +1,25 @@
+import { db } from "./firebase";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+
+// Shembull: ruajtje shpenzimi
+async function ruajShpenzim(shpenzim) {
+  try {
+    await addDoc(collection(db, "shpenzime"), shpenzim);
+    console.log("Shpenzimi u ruajt me sukses!");
+  } catch (e) {
+    console.error("Gabim gjatë ruajtjes së shpenzimit:", e);
+  }
+}
+
+// Shembull: lexim i të gjitha shpenzimeve
+async function lexoShpenzime() {
+  const querySnapshot = await getDocs(collection(db, "shpenzime"));
+  const lista = [];
+  querySnapshot.forEach((doc) => {
+    lista.push({ id: doc.id, ...doc.data() });
+  });
+  return lista;
+}
 import { app } from "./firebase";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
