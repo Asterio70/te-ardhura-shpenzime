@@ -1,4 +1,56 @@
-// Funksioni që do të thirret kur shtypet butoni "Backup JSON"
+// Funksioni që do të thirret kur shtypet butoni "Rikthe JSON"
+const handleRiktheJSON = (e) => {
+    // Kërkesa rikthehet duke klikuar në një input file të fshehur, prandaj e.target.files ekziston
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+        try {
+            const transaksionetPerImport = JSON.parse(event.target.result);
+            
+            if (!Array.isArray(transaksionetPerImport)) {
+                alert("Fajlli i ngarkuar nuk është një format i vlefshëm transaksionesh.");
+                return;
+            }
+
+            let importimetSukses = 0;
+            // Shtoni çdo transaksion individualisht në Firestore
+            for (const t of transaksionetPerImport) {
+                // Përdorni funksionin tuaj ruajShpenzimin por pa ID-në e vjetër
+                const dataToSave = {
+                    ...t,
+                    // SIGURONI QË SHTONI ID-NË E PËRDORUESIT AKTUAL TË KYÇUR
+                    userId: auth.currentUser.uid, 
+                    krijuarMe: new Date()
+                };
+                
+                // Përdorni logjikën tuaj të ruajtjes (pa fushen 'id' nga backup)
+                await addDoc(collection(db, "transaksionet"), dataToSave); 
+                importimetSukses++;
+            }
+
+            alert(`${importimetSukses} transaksione u rikthyen me sukses!`);
+
+        } catch (error) {
+            console.error("Gabim gjatë përpunimit të fajllit:", error);
+            alert("Gabim gjatë importimit të fajllit JSON.");
+        }
+    };
+    reader.readAsText(file); // Filloni leximin e fajllit si tekst
+};
+
+// Lidhja në JSX: Fshihni butonin dhe përdorni një input file
+// <label>
+//    <button onClick={() => document.getElementById('json-upload').click()}>Rikthe JSON</button>
+//    <input 
+//        type="file" 
+//        id="json-upload" 
+//        accept=".json" 
+//        style={{ display: 'none' }} 
+//        onChange={handleRiktheJSON} 
+//    />
+// </label>// Funksioni që do të thirret kur shtypet butoni "Backup JSON"
 const handleBackupJSON = () => {
     // 1. Përgatitja e të dhënave (Përdorim transaksionet aktuale, të filtruara ose jo)
     const jsonString = JSON.stringify(transaksionet, null, 2); // Null, 2 për formatim të lexueshëm
