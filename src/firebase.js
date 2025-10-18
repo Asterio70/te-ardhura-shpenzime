@@ -1,4 +1,15 @@
-import { initializeApp } from "firebase/app";
+// Linja juaj e importit do të duket kështu (shtoni 'doc' dhe 'deleteDoc'):
+
+import { 
+    collection, 
+    addDoc, 
+    getDocs, 
+    onSnapshot, 
+    query, 
+    orderBy,
+    doc,        // Import i ri: Për të referuar një dokument specifik
+    deleteDoc   // Import i ri: Për të fshirë atë dokument
+} from 'firebase/firestore';import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 // Firebase configuration
