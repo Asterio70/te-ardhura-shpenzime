@@ -1,4 +1,56 @@
-// Importoni libraritë e nevojshme
+// src/App.jsx
+
+// SHTONI KËTO DY IMPORTIME NË FILLIM TË FAJLLIT TUAJ
+import jsPDF from 'jspdf'; 
+import 'jspdf-autotable'; // Kjo importon autotable si plugin i jsPDF
+
+// ... (Brenda funksionit App() ku keni akses te të dhënat e llogaritura)
+
+const handleEksportoPDF = () => {
+    // 1. KONTROLLI I TË DHËNAVE
+    if (transaksionet.length === 0) {
+        alert("Nuk ka transaksione për t'u eksportuar.");
+        return;
+    }
+    
+    const doc = new jsPDF();
+    
+    // Titulli i Raportit
+    doc.text("Raporti i Transaksioneve", 14, 15); // Vendosni titullin
+
+    // Përgatitja e Të Dhënave
+    const tableColumn = ["Data", "Lloji", "Kategoria", "Shuma (€)", "Shenime"];
+    // Përgatitni rreshtat nga lista e transaksioneve
+    const tableRows = transaksionet.map(t => [
+        t.data ? t.data.split('T')[0] : 'N/A', // Kujdesni për formatin e datës
+        t.lloji,
+        t.kategoria,
+        Number(t.shuma).toFixed(2),
+        t.shenime || '' 
+    ]);
+
+    // Shto Tavolinën (Fillon në Y=20)
+    doc.autoTable({ 
+        head: [tableColumn], 
+        body: tableRows, 
+        startY: 20,
+        styles: { fontSize: 9 }
+    });
+    
+    // Përmbledhja e Bilancit në fund të tabelës
+    const finalY = doc.autoTable.previous.finalY;
+    doc.setFontSize(10);
+    doc.text(`Të Ardhurat Totale: €${totaliTeArdhurave.toFixed(2)}`, 14, finalY + 10);
+    doc.text(`Shpenzimet Totale: €${totaliShpenzimeve.toFixed(2)}`, 14, finalY + 16);
+    doc.setFontSize(12);
+    doc.setTextColor(30, 144, 255); // Ngjyra e Tepricës (opsionale)
+    doc.text(`TEPRICA (BILANCI): €${teprica.toFixed(2)}`, 14, finalY + 24);
+
+    // Shkarkimi i Fajllit
+    doc.save(`raporti_${new Date().toISOString().split('T')[0]}.pdf`);
+};
+
+// ... (Lidhni këtë funksion me butonin 'Eksporto PDF (Raporti)' në JSX)// Importoni libraritë e nevojshme
 import jsPDF from 'jspdf'; 
 import 'jspdf-autotable'; // Kjo thjesht e bën autotable të disponueshme si plugin
 
