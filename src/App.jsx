@@ -1,4 +1,35 @@
-// src/App.jsx (Brenda funksionit App())
+// src/App.jsx (Brenda return(...))
+
+<div className="filter-section">
+    {/* Inputi 'Nga Data' */}
+    <label>Nga Data</label>
+    <input 
+        type="date"
+        name="nga"
+        value={filterParams.nga}
+        onChange={handleFilterChange}
+    />
+    
+    {/* Inputi 'Deri më' */}
+    <label>Deri më</label>
+    <input 
+        type="date"
+        name="deri"
+        value={filterParams.deri}
+        onChange={handleFilterChange}
+    />
+    
+    {/* Dropdown 'Lloji' */}
+    <select name="lloji" value={filterParams.lloji} onChange={handleFilterChange}>
+        <option value="Të gjithë">Të gjithë</option>
+        <option value="Te ardhurat">Të Ardhurat</option>
+        <option value="Shpenzim">Shpenzim</option>
+    </select>
+    
+    {/* ... (Kategoritë dhe Nënkategoritë vendosen në mënyrë të ngjashme) */}
+</div>
+
+{/* ... (Më poshtë shfaqni listën e transaksioneve (transaksionet)) */}// src/App.jsx (Brenda funksionit App())
 
 useEffect(() => {
     if (!user) return; // Mos vepro nëse përdoruesi nuk është i kyçur
