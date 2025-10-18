@@ -1,4 +1,26 @@
-// src/App.jsx (Brenda return(...))
+// src/App.jsx (Brenda funksionit App())
+
+// ... (user, transaksionet, etj. state)
+
+// Gjendja për ruajtjen e vlerave të filtrit
+const [filterParams, setFilterParams] = useState({
+    nga: '2025-09-30', // Shembull date siç shihet në pamjen e ekranit
+    deri: '2025-10-30', // Shembull date
+    lloji: 'Të gjithë', // Siç shihni në pamjen e ekranit
+    kategoria: 'Të gjithë',
+    nenkategoria: 'Të gjithë',
+});
+
+// Funksion i përgjithshëm për përditësimin e state-s së filtrit
+const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilterParams(prev => ({
+        ...prev,
+        [name]: value,
+    }));
+};
+
+// ...// src/App.jsx (Brenda return(...))
 
 {/* ... Forma e Shtimit të Transaksionit ... */}
 
