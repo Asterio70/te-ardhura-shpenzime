@@ -1,4 +1,25 @@
-// src/App.jsx (Sigurohuni që të keni importuar useMemo)
+// src/App.jsx (Brenda return(...))
+
+{/* ... Forma e Shtimit të Transaksionit ... */}
+
+<div className="balance-container">
+    <div className="balance-item te-ardhura">
+        <label>Të ardhurat</label>
+        <span>€{totaliTeArdhurave.toFixed(2)}</span> {/* €1,650.00 */}
+    </div>
+    
+    <div className="balance-item shpenzime">
+        <label>Shpenzimet</label>
+        <span>€{totaliShpenzimeve.toFixed(2)}</span> {/* €1,292.20 */}
+    </div>
+
+    <div className="balance-item teprica">
+        <label>Tepricë</label>
+        <span>€{teprica.toFixed(2)}</span> {/* €357.80 */}
+    </div>
+</div>
+
+{/* ... Lista e Transaksioneve ... */}// src/App.jsx (Sigurohuni që të keni importuar useMemo)
 
 import React, { useState, useEffect, useMemo } from 'react'; // <--- Shtoni useMemo këtu
 
