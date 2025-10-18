@@ -1,4 +1,12 @@
-import { db } from "./firebase";
+// src/App.jsx (ose ku shfaqet lista)
+
+import React, { useState, useEffect } from 'react';
+import { db } from './firebase'; 
+
+// Importoni funksionet e nevojshme të leximit nga Firestore
+import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore'; 
+
+// ... pjesa tjetër e koditimport { db } from "./firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 
 // Shembull: ruajtje shpenzimi
