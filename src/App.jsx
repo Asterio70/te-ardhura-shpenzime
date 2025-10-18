@@ -1,4 +1,16 @@
-// src/App.jsx (ose ku shfaqet lista)
+// src/App.jsx
+
+// Kjo linjë do të ketë nevojë për 'updateDoc'
+import { 
+    collection, 
+    addDoc, 
+    doc, 
+    deleteDoc, 
+    updateDoc, // <--- SHTONI KËTË
+    onSnapshot, 
+    query, 
+    orderBy 
+} from 'firebase/firestore';// src/App.jsx (ose ku shfaqet lista)
 
 import React, { useState, useEffect } from 'react';
 import { db } from './firebase'; 
