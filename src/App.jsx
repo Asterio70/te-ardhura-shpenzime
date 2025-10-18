@@ -1,5 +1,59 @@
 // src/App.jsx (Brenda funksionit App())
 
+useEffect(() => {
+    if (!user) return; // Mos vepro nëse përdoruesi nuk është i kyçur
+
+    const transaksionetRef = collection(db, 'transaksionet');
+    
+    // 1. Defino bazën e query-së (kërkesës)
+    let qBase = transaksionetRef;
+    
+    // 2. Krijoni listën e kushteve (where clauses)
+    let whereClauses = [];
+
+    // KRITIKJA E SIGURISË: Filtri i ID-së së Përdoruesit
+    whereClauses.push(where("userId", "==", user.uid)); 
+    
+    // FILTRI I DATËS: Nga Data (Data në Firestore duhet të jetë në format Date ose Timestamp)
+    // Supozojmë se në Firestore e ruani fushën e datës si 'data' në formatin string YYYY-MM-DD
+    if (filterParams.nga) {
+        whereClauses.push(where("data", ">=", filterParams.nga)); 
+    }
+    // FILTRI I DATËS: Deri në Datë
+    if (filterParams.deri) {
+        whereClauses.push(where("data", "<=", filterParams.deri));
+    }
+
+    // FILTRA TË TJERË (LLOJI/KATEGORIA)
+    if (filterParams.lloji !== 'Të gjithë') {
+        whereClauses.push(where("lloji", "==", filterParams.lloji));
+    }
+    if (filterParams.kategoria !== 'Të gjithë') {
+        whereClauses.push(where("kategoria", "==", filterParams.kategoria));
+    }
+    // (Përsëriteni këtë për nenkategoria)
+
+    // 3. Kombinoni Query-në me të gjitha kushtet
+    const q = query(
+        qBase, 
+        ...whereClauses, // Shpërndajini të gjitha kushtet 'where'
+        orderBy("data", "desc") // Për transaksione me rang datash, renditja duhet të jetë në fushën e datës
+    );
+
+    // 4. Vendosni dëgjuesin (onSnapshot)
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+        const lista = snapshot.docs.map(doc => ({ 
+            id: doc.id, 
+            ...doc.data() 
+        }));
+        setTransaksionet(lista);
+    });
+
+    return () => unsubscribe(); 
+
+// Dëgjuesi ri-ekzekutohet sa herë që ndryshon një nga varësitë
+}, [filterParams, user]);// src/App.jsx (Brenda funksionit App())
+
 // ... (user, transaksionet, etj. state)
 
 // Gjendja për ruajtjen e vlerave të filtrit
