@@ -1,4 +1,52 @@
-// Funksioni që do të thirret kur shtypet butoni "Rikthe JSON"
+// Importoni libraritë e nevojshme
+import jsPDF from 'jspdf'; 
+import 'jspdf-autotable'; // Kjo thjesht e bën autotable të disponueshme si plugin
+
+// ... (brenda App() funksionit, ku keni akses te transaksionet, totaliTeArdhurave, etj.)
+
+const handleEksportoPDF = () => {
+    // KONTROLLI I TË DHËNAVE
+    if (transaksionet.length === 0) {
+        alert("Nuk ka transaksione për t'u eksportuar.");
+        return;
+    }
+    
+    const doc = new jsPDF();
+    
+    // Titulli i Raportit
+    doc.text("Raporti i Transaksioneve (Filter i tanishëm)", 14, 15); // x, y pozicioni
+
+    // Përgatitja e Të Dhënave
+    const tableColumn = ["Data", "Lloji", "Kategoria", "Shuma (€)", "Shenime"];
+    const tableRows = transaksionet.map(t => [
+        t.data ? t.data.split('T')[0] : 'N/A', // Formatimi i thjeshtë i datës
+        t.lloji,
+        t.kategoria,
+        Number(t.shuma).toFixed(2),
+        t.shenime || '' 
+    ]);
+
+    // Shto Tavolinën
+    doc.autoTable({ 
+        head: [tableColumn], 
+        body: tableRows, 
+        startY: 20,
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [30, 144, 255] } // Ngjyrë e bukur
+    });
+    
+    // Përmbledhja e Bilancit
+    const finalY = doc.autoTable.previous.finalY;
+    doc.setFontSize(10);
+    doc.text(`Të Ardhurat Totale: €${totaliTeArdhurave.toFixed(2)}`, 14, finalY + 10);
+    doc.text(`Shpenzimet Totale: €${totaliShpenzimeve.toFixed(2)}`, 14, finalY + 16);
+    doc.setFontSize(12);
+    doc.setTextColor(255, 0, 0); // Kthejini ngjyrën e Tepricës në të kuqe
+    doc.text(`TEPRICA (BILANCI): €${teprica.toFixed(2)}`, 14, finalY + 24);
+
+    // Shkarkimi i Fajllit
+    doc.save(`raporti_${new Date().toISOString().split('T')[0]}.pdf`);
+};// Funksioni që do të thirret kur shtypet butoni "Rikthe JSON"
 const handleRiktheJSON = (e) => {
     // Kërkesa rikthehet duke klikuar në një input file të fshehur, prandaj e.target.files ekziston
     const file = e.target.files[0];
