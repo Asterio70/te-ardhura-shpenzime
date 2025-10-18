@@ -1,4 +1,5 @@
-{
+# Instaloni librarinë kryesore për PDF dhe shtojcën e tabelave
+npm install jspdf jspdf-autotable{
   "name": "te-ardhura-shpenzime",
   "version": "1.0.0",
   "private": true,
