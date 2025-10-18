@@ -1,4 +1,47 @@
-// Vendosni këtë funksion në src/App.jsx
+// src/App.jsx (Sigurohuni që të keni importuar useMemo)
+
+import React, { useState, useEffect, useMemo } from 'react'; // <--- Shtoni useMemo këtu
+
+import { db, auth } from './firebase'; 
+// ... (Importet e tjera)
+
+function App() {
+    // 1. Gjendja e përdoruesit (Nga hapat e mëparshëm)
+    const [user, setUser] = useState(null); 
+    // ...
+    
+    // 2. Gjendja e Transaksioneve (Nga onSnapshot)
+    const [transaksionet, setTransaksionet] = useState([]);
+    
+    // ... (Logjika useEffect për onAuthStateChanged dhe onSnapshot shkon këtu)
+    
+    // 3. Llogaritja e Balancës me useMemo
+    const { 
+        totaliTeArdhurave, 
+        totaliShpenzimeve, 
+        teprica 
+    } = useMemo(() => {
+        let teArdhurat = 0;
+        let shpenzimet = 0;
+
+        transaksionet.forEach(t => {
+            const shuma = Number(t.shuma);
+            // Përdorni 'lloji' siç e keni ruajtur në Firestore (p.sh., "Te ardhurat" ose "Shpenzim")
+            if (t.lloji === 'Te ardhurat') {
+                teArdhurat += shuma;
+            } else if (t.lloji === 'Shpenzim') {
+                shpenzimet += shuma;
+            }
+        });
+
+        return {
+            totaliTeArdhurave: teArdhurat,
+            totaliShpenzimeve: shpenzimet,
+            teprica: teArdhurat - shpenzimet
+        };
+    }, [transaksionet]); // Varësia e vetme është lista e transaksioneve
+    
+    // ... (Pjesa Render - return (...))// Vendosni këtë funksion në src/App.jsx
 
 const perditesoTransaksionin = async (transaksionId, fushaTeReja) => {
     
