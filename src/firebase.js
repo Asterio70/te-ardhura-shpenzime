@@ -1,4 +1,8 @@
-// Linja juaj e importit do të duket kështu (shtoni 'doc' dhe 'deleteDoc'):
+// Shembull i thirrjes:
+perditesoTransaksionin("ID_UNIKALE_E_TRANSAKSIONIT", {
+    shuma: 150.00,
+    kategoria: "Ushqim",
+});// Linja juaj e importit do të duket kështu (shtoni 'doc' dhe 'deleteDoc'):
 
 import { 
     collection, 
