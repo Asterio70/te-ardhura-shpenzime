@@ -1,4 +1,27 @@
-// src/App.jsx (Brenda return(...))
+// Funksioni që do të thirret kur shtypet butoni "Backup JSON"
+const handleBackupJSON = () => {
+    // 1. Përgatitja e të dhënave (Përdorim transaksionet aktuale, të filtruara ose jo)
+    const jsonString = JSON.stringify(transaksionet, null, 2); // Null, 2 për formatim të lexueshëm
+
+    // 2. Krijimi i një Blob (Binary Large Object)
+    const blob = new Blob([jsonString], { type: "application/json" });
+    
+    // 3. Krijimi i URL-së dhe Shkarkimi
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    // Emri i fajllit shkarkues (përdorni datën aktuale)
+    a.download = `backup_shpenzime_${new Date().toISOString().split('T')[0]}.json`; 
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url); // Pastrohet URL-ja e përkohshme
+    
+    alert("Backup-i JSON u shkarkua me sukses!");
+};
+
+// Lidhja në JSX:
+// <button onClick={handleBackupJSON}>Backup JSON</button>// src/App.jsx (Brenda return(...))
 
 <div className="filter-section">
     {/* Inputi 'Nga Data' */}
