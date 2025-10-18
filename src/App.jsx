@@ -1,4 +1,25 @@
-// src/App.jsx
+// Vendosni këtë funksion në src/App.jsx
+
+const perditesoTransaksionin = async (transaksionId, fushaTeReja) => {
+    
+    // Për shembull: fushaTeReja mund të jetë { shuma: 75.00, shenime: "Fatura e re" }
+
+    try {
+        // 1. Krijoni referencën tek dokumenti specifik
+        const dokumentiRef = doc(db, "transaksionet", transaksionId);
+
+        // 2. Përditësoni dokumentin. 
+        // updateDoc ndryshon vetëm fushat që i jepni (nuk i fshin të tjerat)
+        await updateDoc(dokumentiRef, fushaTeReja);
+
+        console.log("Transaksioni me ID", transaksionId, "u përditësua me sukses!");
+        // UI do të përditësohet automatikisht falë onSnapshot
+
+    } catch (error) {
+        console.error("Gabim gjatë përditësimit të transaksionit:", error);
+        alert("Gabim gjatë përditësimit.");
+    }
+};// src/App.jsx
 
 // Kjo linjë do të ketë nevojë për 'updateDoc'
 import { 
